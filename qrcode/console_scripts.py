@@ -61,7 +61,7 @@ def main(args=sys.argv[1:]):
         qr.print_ascii(tty=True,invert=not invert)
         return
 
-    img = qr.make_image(image_factory=image_factory, invert=invert)
+    img = qr.make_image(image_factory=image_factory)
     img.save(sys.stdout)
 
 
