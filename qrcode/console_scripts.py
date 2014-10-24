@@ -31,6 +31,9 @@ def main(args=sys.argv[1:]):
         "--optimize", type=int, help="Optimize the data by looking for chunks "
         "of at least this many characters that could use a more efficient "
         "encoding method. Use 0 to turn off chunk optimization.")
+    parser.add_option(
+        "-i", "--invert", action="store_true", help="Invert the image for usage "
+        "with black text on white background. Only works on console output.")
     opts, args = parser.parse_args(args)
 
     if opts.factory:
@@ -43,6 +46,8 @@ def main(args=sys.argv[1:]):
     else:
         image_factory = None
 
+    invert = opts.invert or False
+
     if args:
         data = args[0]
     else:
@@ -53,10 +58,10 @@ def main(args=sys.argv[1:]):
         qr.add_data(data, optimize=opts.optimize)
 
     if image_factory is None and sys.stdout.isatty():
-        qr.print_ascii(tty=True)
+        qr.print_ascii(tty=True,invert=not invert)
         return
 
-    img = qr.make_image(image_factory=image_factory)
+    img = qr.make_image(image_factory=image_factory, invert=invert)
     img.save(sys.stdout)
 
 
